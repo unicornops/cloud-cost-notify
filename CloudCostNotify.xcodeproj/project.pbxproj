@@ -1,0 +1,567 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* CloudCostNotifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* CloudCostNotifyApp.swift */; };
+		A10000000000000000000002 /* CostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* CostData.swift */; };
+		A10000000000000000000003 /* CloudAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* CloudAccount.swift */; };
+		A10000000000000000000004 /* ResourceCost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* ResourceCost.swift */; };
+		A10000000000000000000005 /* CloudCostProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* CloudCostProvider.swift */; };
+		A10000000000000000000006 /* CloudCostError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* CloudCostError.swift */; };
+		A10000000000000000000007 /* AWSCostProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* AWSCostProvider.swift */; };
+		A10000000000000000000008 /* AWSCostExplorerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* AWSCostExplorerClient.swift */; };
+		A10000000000000000000009 /* AWSProfileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* AWSProfileParser.swift */; };
+		A10000000000000000000010 /* CostAggregationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* CostAggregationService.swift */; };
+		A10000000000000000000011 /* RefreshScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* RefreshScheduler.swift */; };
+		A10000000000000000000012 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* CacheService.swift */; };
+		A10000000000000000000013 /* MenuBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* MenuBarViewModel.swift */; };
+		A10000000000000000000014 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* SettingsViewModel.swift */; };
+		A10000000000000000000015 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* MenuBarView.swift */; };
+		A10000000000000000000016 /* MenuBarLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* MenuBarLabelView.swift */; };
+		A10000000000000000000017 /* CostBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* CostBreakdownView.swift */; };
+		A10000000000000000000018 /* ProviderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000018 /* ProviderRowView.swift */; };
+		A10000000000000000000019 /* AccountRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000019 /* AccountRowView.swift */; };
+		A10000000000000000000020 /* ResourceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000020 /* ResourceRowView.swift */; };
+		A10000000000000000000021 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000021 /* SettingsView.swift */; };
+		A10000000000000000000022 /* AccountsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000022 /* AccountsSettingsView.swift */; };
+		A10000000000000000000023 /* RefreshSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000023 /* RefreshSettingsView.swift */; };
+		A10000000000000000000024 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000024 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000000 /* CloudCostNotify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudCostNotify.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000001 /* CloudCostNotifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCostNotifyApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* CostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostData.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* CloudAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAccount.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* ResourceCost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceCost.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* CloudCostProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCostProvider.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* CloudCostError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCostError.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* AWSCostProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSCostProvider.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* AWSCostExplorerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSCostExplorerClient.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* AWSProfileParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWSProfileParser.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* CostAggregationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostAggregationService.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* RefreshScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshScheduler.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
+		A20000000000000000000013 /* MenuBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000014 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		A20000000000000000000016 /* MenuBarLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabelView.swift; sourceTree = "<group>"; };
+		A20000000000000000000017 /* CostBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostBreakdownView.swift; sourceTree = "<group>"; };
+		A20000000000000000000018 /* ProviderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderRowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000019 /* AccountRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountRowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000020 /* ResourceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceRowView.swift; sourceTree = "<group>"; };
+		A20000000000000000000021 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000022 /* AccountsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsSettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000023 /* RefreshSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshSettingsView.swift; sourceTree = "<group>"; };
+		A20000000000000000000024 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000025 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000000000000000000026 /* CloudCostNotify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CloudCostNotify.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000000 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000001 /* CloudCostNotify */,
+				A40000000000000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000001 /* CloudCostNotify */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000003 /* App */,
+				A40000000000000000000004 /* Core */,
+				A40000000000000000000008 /* Providers */,
+				A40000000000000000000010 /* Services */,
+				A40000000000000000000011 /* ViewModels */,
+				A40000000000000000000012 /* Views */,
+				A40000000000000000000016 /* Resources */,
+				A20000000000000000000025 /* Info.plist */,
+				A20000000000000000000026 /* CloudCostNotify.entitlements */,
+			);
+			path = CloudCostNotify;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000000 /* CloudCostNotify.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* CloudCostNotifyApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000004 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000005 /* Models */,
+				A40000000000000000000006 /* Protocols */,
+				A40000000000000000000007 /* Errors */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000005 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000002 /* CostData.swift */,
+				A20000000000000000000003 /* CloudAccount.swift */,
+				A20000000000000000000004 /* ResourceCost.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000006 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000005 /* CloudCostProvider.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000007 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000006 /* CloudCostError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000008 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000009 /* AWS */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000009 /* AWS */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000007 /* AWSCostProvider.swift */,
+				A20000000000000000000008 /* AWSCostExplorerClient.swift */,
+				A20000000000000000000009 /* AWSProfileParser.swift */,
+			);
+			path = AWS;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000010 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000010 /* CostAggregationService.swift */,
+				A20000000000000000000011 /* RefreshScheduler.swift */,
+				A20000000000000000000012 /* CacheService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000011 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000013 /* MenuBarViewModel.swift */,
+				A20000000000000000000014 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000012 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000013 /* MenuBar */,
+				A40000000000000000000014 /* Breakdown */,
+				A40000000000000000000015 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000013 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000015 /* MenuBarView.swift */,
+				A20000000000000000000016 /* MenuBarLabelView.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000014 /* Breakdown */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000017 /* CostBreakdownView.swift */,
+				A20000000000000000000018 /* ProviderRowView.swift */,
+				A20000000000000000000019 /* AccountRowView.swift */,
+				A20000000000000000000020 /* ResourceRowView.swift */,
+			);
+			path = Breakdown;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000015 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000021 /* SettingsView.swift */,
+				A20000000000000000000022 /* AccountsSettingsView.swift */,
+				A20000000000000000000023 /* RefreshSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000016 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000024 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* CloudCostNotify */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000001 /* Build configuration list for PBXNativeTarget "CloudCostNotify" */;
+			buildPhases = (
+				A60000000000000000000001 /* Sources */,
+				A30000000000000000000001 /* Frameworks */,
+				A60000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CloudCostNotify;
+			packageProductDependencies = (
+				A80000000000000000000001 /* AWSCostExplorer */,
+				A80000000000000000000002 /* AWSClientRuntime */,
+				A80000000000000000000003 /* AWSSDKIdentity */,
+			);
+			productName = CloudCostNotify;
+			productReference = A20000000000000000000000 /* CloudCostNotify.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000000000000000000002 /* Build configuration list for PBXProject "CloudCostNotify" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000000000000000000000;
+			packageReferences = (
+				A80000000000000000000000 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+			);
+			productRefGroup = A40000000000000000000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* CloudCostNotify */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A60000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000024 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A60000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* CloudCostNotifyApp.swift in Sources */,
+				A10000000000000000000002 /* CostData.swift in Sources */,
+				A10000000000000000000003 /* CloudAccount.swift in Sources */,
+				A10000000000000000000004 /* ResourceCost.swift in Sources */,
+				A10000000000000000000005 /* CloudCostProvider.swift in Sources */,
+				A10000000000000000000006 /* CloudCostError.swift in Sources */,
+				A10000000000000000000007 /* AWSCostProvider.swift in Sources */,
+				A10000000000000000000008 /* AWSCostExplorerClient.swift in Sources */,
+				A10000000000000000000009 /* AWSProfileParser.swift in Sources */,
+				A10000000000000000000010 /* CostAggregationService.swift in Sources */,
+				A10000000000000000000011 /* RefreshScheduler.swift in Sources */,
+				A10000000000000000000012 /* CacheService.swift in Sources */,
+				A10000000000000000000013 /* MenuBarViewModel.swift in Sources */,
+				A10000000000000000000014 /* SettingsViewModel.swift in Sources */,
+				A10000000000000000000015 /* MenuBarView.swift in Sources */,
+				A10000000000000000000016 /* MenuBarLabelView.swift in Sources */,
+				A10000000000000000000017 /* CostBreakdownView.swift in Sources */,
+				A10000000000000000000018 /* ProviderRowView.swift in Sources */,
+				A10000000000000000000019 /* AccountRowView.swift in Sources */,
+				A10000000000000000000020 /* ResourceRowView.swift in Sources */,
+				A10000000000000000000021 /* SettingsView.swift in Sources */,
+				A10000000000000000000022 /* AccountsSettingsView.swift in Sources */,
+				A10000000000000000000023 /* RefreshSettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A70000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A70000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A70000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CloudCostNotify/CloudCostNotify.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloudCostNotify/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.unicornops.CloudCostNotify;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A70000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CloudCostNotify/CloudCostNotify.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CloudCostNotify/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.unicornops.CloudCostNotify;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000000000000000000001 /* Build configuration list for PBXNativeTarget "CloudCostNotify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000005 /* Debug */,
+				A70000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000002 /* Build configuration list for PBXProject "CloudCostNotify" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000003 /* Debug */,
+				A70000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A80000000000000000000000 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/awslabs/aws-sdk-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A80000000000000000000001 /* AWSCostExplorer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000000 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSCostExplorer;
+		};
+		A80000000000000000000002 /* AWSClientRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000000 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSClientRuntime;
+		};
+		A80000000000000000000003 /* AWSSDKIdentity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000000 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSSDKIdentity;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A00000000000000000000001 /* Project object */;
+}
