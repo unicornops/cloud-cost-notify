@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.1.1 - 2026-01-30
+#### Bug Fixes
+- (**ci**) remove CODE_SIGN_ENTITLEMENTS from xcodebuild command line - (4dc845f) - Rob Lazzurs
+
+- - -
+
 ## v0.1.0 - 2026-01-30
 #### Features
 - CI - (a76f7b4) - Rob Lazzurs
