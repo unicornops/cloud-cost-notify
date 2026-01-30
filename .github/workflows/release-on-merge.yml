@@ -289,6 +289,9 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_NAME"
 
           # Build with signing
+          # Note: We don't pass CODE_SIGN_ENTITLEMENTS on the command line because it would
+          # apply to all targets including Swift Package dependencies. Instead, entitlements
+          # should be configured in the Xcode project settings for the CloudCostNotify target.
           xcodebuild \
             -project CloudCostNotify.xcodeproj \
             -scheme CloudCostNotify \
@@ -298,8 +301,6 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="$CERT_TEAM_ID" \
             ENABLE_HARDENED_RUNTIME=YES \
-            CODE_SIGN_ENTITLEMENTS="CloudCostNotify/CloudCostNotify.entitlements" \
-            CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
             OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN_NAME --options runtime --timestamp" \
             build
 
