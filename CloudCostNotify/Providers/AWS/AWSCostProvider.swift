@@ -67,82 +67,101 @@ final class AWSCostProvider: CloudCostProvider, @unchecked Sendable {
     }
 
     private func parseOutput(_ output: GetCostAndUsageOutput, for account: CloudAccount) -> [AccountCost] {
-        var serviceCosts: [String: [String: Decimal]] = [:]
+        let serviceCosts = extractServiceCosts(from: output)
 
-        guard let results = output.resultsByTime else {
-            return []
-        }
-
-        for result in results {
-            guard let groups = result.groups else { continue }
-
-            for group in groups {
-                guard let keys = group.keys, keys.count >= 2 else { continue }
-
-                let serviceName = keys[0]
-                let linkedAccountId = keys[1]
-
-                guard let metrics = group.metrics,
-                      let unblendedCost = metrics["UnblendedCost"],
-                      let amountString = unblendedCost.amount,
-                      let amount = Decimal(string: amountString) else {
-                    continue
-                }
-
-                if serviceCosts[linkedAccountId] == nil {
-                    serviceCosts[linkedAccountId] = [:]
-                }
-
-                let currentCost = serviceCosts[linkedAccountId]?[serviceName] ?? Decimal.zero
-                serviceCosts[linkedAccountId]?[serviceName] = currentCost + amount
-            }
+        guard !serviceCosts.isEmpty else {
+            return [createEmptyAccountCost(for: account)]
         }
 
         var accountCosts: [AccountCost] = []
 
         for (linkedAccountId, services) in serviceCosts {
-            var resourceCosts: [ResourceCost] = []
-            var accountTotal: Decimal = .zero
-
-            for (serviceName, cost) in services.sorted(by: { $0.value > $1.value }) {
-                if cost > 0 {
-                    resourceCosts.append(ResourceCost(
-                        id: "\(linkedAccountId)_\(serviceName)",
-                        serviceName: serviceName,
-                        cost: cost,
-                        currency: "USD"
-                    ))
-                    accountTotal += cost
-                }
-            }
-
-            if accountTotal > 0 {
-                let displayName = linkedAccountId == account.profileName ?
-                    account.displayName : "\(account.displayName) - \(linkedAccountId)"
-
-                accountCosts.append(AccountCost(
-                    id: "\(account.id)_\(linkedAccountId)",
-                    accountId: linkedAccountId,
-                    accountName: displayName,
-                    totalCost: accountTotal,
-                    currency: "USD",
-                    resourceCosts: resourceCosts
-                ))
+            if let accountCost = createAccountCost(
+                linkedAccountId: linkedAccountId,
+                services: services,
+                account: account
+            ) {
+                accountCosts.append(accountCost)
             }
         }
 
         if accountCosts.isEmpty {
-            accountCosts.append(AccountCost(
-                id: account.id,
-                accountId: account.profileName ?? account.id,
-                accountName: account.displayName,
-                totalCost: .zero,
-                currency: "USD",
-                resourceCosts: []
-            ))
+            return [createEmptyAccountCost(for: account)]
         }
 
         return accountCosts.sorted { $0.totalCost > $1.totalCost }
+    }
+
+    private func extractServiceCosts(from output: GetCostAndUsageOutput) -> [String: [String: Decimal]] {
+        var serviceCosts: [String: [String: Decimal]] = [:]
+
+        guard let results = output.resultsByTime else { return [:] }
+
+        for result in results {
+            guard let groups = result.groups else { continue }
+
+            for group in groups {
+                guard let keys = group.keys, keys.count >= 2,
+                      let metrics = group.metrics,
+                      let unblendedCost = metrics["UnblendedCost"],
+                      let amountString = unblendedCost.amount,
+                      let amount = Decimal(string: amountString) else { continue }
+
+                let serviceName = keys[0]
+                let linkedAccountId = keys[1]
+
+                if serviceCosts[linkedAccountId] == nil {
+                    serviceCosts[linkedAccountId] = [:]
+                }
+                let currentCost = serviceCosts[linkedAccountId]?[serviceName] ?? Decimal.zero
+                serviceCosts[linkedAccountId]?[serviceName] = currentCost + amount
+            }
+        }
+        return serviceCosts
+    }
+
+    private func createAccountCost(
+        linkedAccountId: String,
+        services: [String: Decimal],
+        account: CloudAccount
+    ) -> AccountCost? {
+        var resourceCosts: [ResourceCost] = []
+        var accountTotal: Decimal = .zero
+
+        for (serviceName, cost) in services.sorted(by: { $0.value > $1.value }) where cost > 0 {
+            resourceCosts.append(ResourceCost(
+                id: "\(linkedAccountId)_\(serviceName)",
+                serviceName: serviceName,
+                cost: cost,
+                currency: "USD"
+            ))
+            accountTotal += cost
+        }
+
+        guard accountTotal > 0 else { return nil }
+
+        let displayName = linkedAccountId == account.profileName ?
+            account.displayName : "\(account.displayName) - \(linkedAccountId)"
+
+        return AccountCost(
+            id: "\(account.id)_\(linkedAccountId)",
+            accountId: linkedAccountId,
+            accountName: displayName,
+            totalCost: accountTotal,
+            currency: "USD",
+            resourceCosts: resourceCosts
+        )
+    }
+
+    private func createEmptyAccountCost(for account: CloudAccount) -> AccountCost {
+        AccountCost(
+            id: account.id,
+            accountId: account.profileName ?? account.id,
+            accountName: account.displayName,
+            totalCost: .zero,
+            currency: "USD",
+            resourceCosts: []
+        )
     }
 }
 

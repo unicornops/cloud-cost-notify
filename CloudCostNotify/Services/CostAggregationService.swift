@@ -97,7 +97,7 @@ final class CostAggregationService {
     }
 
     func fetchCosts() async {
-        guard !accounts.filter({ $0.isEnabled }).isEmpty else {
+        guard accounts.contains(where: { $0.isEnabled }) else {
             loadingState = .error("No accounts enabled")
             return
         }

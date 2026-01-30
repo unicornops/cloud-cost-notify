@@ -22,9 +22,12 @@ struct RefreshSettingsView: View {
             } header: {
                 Text("Automatic Refresh")
             } footer: {
-                Text("Cloud costs are updated periodically. More frequent refreshes may incur additional API costs ($0.01 per request).")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Text(
+                    "Cloud costs are updated periodically. " +
+                        "More frequent refreshes may incur additional API costs ($0.01 per request)."
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
 
             Section {

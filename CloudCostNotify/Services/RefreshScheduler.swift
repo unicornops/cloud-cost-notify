@@ -113,5 +113,4 @@ final class RefreshScheduler {
             return "\(hours)h \(remainingMinutes)m"
         }
     }
-
 }
