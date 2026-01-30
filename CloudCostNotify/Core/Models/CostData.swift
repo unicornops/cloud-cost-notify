@@ -7,7 +7,8 @@ struct DateRange: Codable, Equatable, Sendable {
     static var monthToDate: DateRange {
         let calendar = Calendar.current
         let now = Date()
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
+        let components = calendar.dateComponents([.year, .month], from: now)
+        let startOfMonth = calendar.date(from: components) ?? now
         return DateRange(start: startOfMonth, end: now)
     }
 

@@ -33,9 +33,10 @@ struct AccountsSettingsView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
 
-            Link("Learn more about AWS credentials",
-                 destination: URL(string: "https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html")!)
-                .font(.caption)
+            if let url = URL(string: "https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html") {
+                Link("Learn more about AWS credentials", destination: url)
+                    .font(.caption)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

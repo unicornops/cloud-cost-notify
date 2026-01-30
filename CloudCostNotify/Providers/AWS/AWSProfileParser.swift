@@ -95,8 +95,10 @@ final class AWSProfileParser: Sendable {
             }
 
             if let equalsIndex = trimmedLine.firstIndex(of: "=") {
-                let key = String(trimmedLine[..<equalsIndex]).trimmingCharacters(in: .whitespaces).lowercased()
-                let value = String(trimmedLine[trimmedLine.index(after: equalsIndex)...]).trimmingCharacters(in: .whitespaces)
+                let key = String(trimmedLine[..<equalsIndex])
+                    .trimmingCharacters(in: .whitespaces).lowercased()
+                let value = String(trimmedLine[trimmedLine.index(after: equalsIndex)...])
+                    .trimmingCharacters(in: .whitespaces)
 
                 switch key {
                 case "aws_access_key_id":
