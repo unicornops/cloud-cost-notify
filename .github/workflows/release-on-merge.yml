@@ -301,6 +301,7 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="$CERT_TEAM_ID" \
             ENABLE_HARDENED_RUNTIME=YES \
+            CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
             OTHER_CODE_SIGN_FLAGS="--keychain $KEYCHAIN_NAME --options runtime --timestamp" \
             build
 
@@ -374,12 +375,29 @@ jobs:
 
           echo "Submitting to Apple for notarization..."
           echo "This may take several minutes..."
-          xcrun notarytool submit NotarizeApp.zip \
+
+          # Submit and capture the output to get the submission ID
+          SUBMIT_OUTPUT=$(xcrun notarytool submit NotarizeApp.zip \
             --apple-id "$APPLE_ID" \
             --team-id "$TEAM_ID" \
             --password "$APPLE_PASSWORD" \
             --wait \
-            --timeout 30m
+            --timeout 30m 2>&1) || {
+            SUBMISSION_ID=$(echo "$SUBMIT_OUTPUT" | grep -o 'id: [a-f0-9-]*' | head -1 | cut -d' ' -f2)
+            echo "Notarization failed!"
+            echo "$SUBMIT_OUTPUT"
+            if [ -n "$SUBMISSION_ID" ]; then
+              echo ""
+              echo "Fetching notarization log for submission $SUBMISSION_ID..."
+              xcrun notarytool log "$SUBMISSION_ID" \
+                --apple-id "$APPLE_ID" \
+                --team-id "$TEAM_ID" \
+                --password "$APPLE_PASSWORD" || true
+            fi
+            exit 1
+          }
+
+          echo "$SUBMIT_OUTPUT"
 
           echo ""
           echo "Stapling notarization ticket..."
