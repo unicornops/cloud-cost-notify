@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.1.2 - 2026-02-07
+#### Bug Fixes
+- (**ci**) prevent debug entitlement injection in release builds - (f0fc783) - Rob Lazzurs
+
+- - -
+
 ## v0.1.1 - 2026-01-30
 #### Bug Fixes
 - (**ci**) remove CODE_SIGN_ENTITLEMENTS from xcodebuild command line - (4dc845f) - Rob Lazzurs
