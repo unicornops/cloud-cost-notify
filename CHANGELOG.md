@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.2.0 - 2026-03-20
+#### Features
+- Add AWS shared config folder support and resource breakdown - (532bd6e) - Rob Lazzurs
+
+- - -
+
 ## v0.1.2 - 2026-02-07
 #### Bug Fixes
 - (**ci**) prevent debug entitlement injection in release builds - (f0fc783) - Rob Lazzurs
