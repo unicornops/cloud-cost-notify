@@ -11,5 +11,6 @@ struct MenuBarLabelView: View {
             Text(viewModel.menuBarText)
                 .monospacedDigit()
         }
+        .help("Cloud spend month to date")
     }
 }

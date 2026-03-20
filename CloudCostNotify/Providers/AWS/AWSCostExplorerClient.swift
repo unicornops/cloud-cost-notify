@@ -6,8 +6,12 @@ import AWSSDKIdentity
 actor AWSCostExplorerClient {
     private var clientCache: [String: CostExplorerClient] = [:]
 
-    func getClient(for profileName: String, region: String = "us-east-1") async throws -> CostExplorerClient {
-        let cacheKey = "\(profileName)_\(region)"
+    func getClient(
+        for profileName: String,
+        region: String = "us-east-1",
+        sharedConfigDirectory: URL?
+    ) async throws -> CostExplorerClient {
+        let cacheKey = "\(profileName)_\(region)_\(sharedConfigDirectory?.path ?? "default")"
 
         if let cachedClient = clientCache[cacheKey] {
             return cachedClient
@@ -32,9 +36,23 @@ actor AWSCostExplorerClient {
         profileName: String,
         startDate: Date,
         endDate: Date,
+        sharedConfigDirectory: URL?,
         region: String = "us-east-1"
     ) async throws -> GetCostAndUsageOutput {
-        let client = try await getClient(for: profileName, region: region)
+        let didStartAccessing = sharedConfigDirectory?.startAccessingSecurityScopedResource() ?? false
+        defer {
+            if didStartAccessing {
+                sharedConfigDirectory?.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        configureAWSSharedFiles(using: sharedConfigDirectory)
+
+        let client = try await getClient(
+            for: profileName,
+            region: region,
+            sharedConfigDirectory: sharedConfigDirectory
+        )
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -76,5 +94,27 @@ actor AWSCostExplorerClient {
 
     func clearCache() {
         clientCache.removeAll()
+    }
+
+    private func configureAWSSharedFiles(using directoryURL: URL?) {
+        guard let directoryURL else {
+            unsetenv("AWS_SHARED_CREDENTIALS_FILE")
+            unsetenv("AWS_CONFIG_FILE")
+            return
+        }
+
+        let credentialsPath = directoryURL.appendingPathComponent("credentials", isDirectory: false).path
+        let configPath = directoryURL.appendingPathComponent("config", isDirectory: false).path
+
+        if FileManager.default.fileExists(atPath: credentialsPath) {
+            setenv("AWS_SHARED_CREDENTIALS_FILE", credentialsPath, 1)
+        } else {
+            unsetenv("AWS_SHARED_CREDENTIALS_FILE")
+        }
+        if FileManager.default.fileExists(atPath: configPath) {
+            setenv("AWS_CONFIG_FILE", configPath, 1)
+        } else {
+            unsetenv("AWS_CONFIG_FILE")
+        }
     }
 }

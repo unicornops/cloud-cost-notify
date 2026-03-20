@@ -37,6 +37,27 @@ struct CostData: Codable, Equatable, Sendable {
         formatter.currencyCode = currency
         return formatter.string(from: amount as NSDecimalNumber) ?? "$0.00"
     }
+
+    var aggregatedResourceCosts: [ResourceCost] {
+        var serviceTotals: [String: Decimal] = [:]
+
+        for accountCost in accountCosts {
+            for resourceCost in accountCost.resourceCosts {
+                serviceTotals[resourceCost.serviceName, default: .zero] += resourceCost.cost
+            }
+        }
+
+        return serviceTotals
+            .map { serviceName, cost in
+                ResourceCost(
+                    id: "\(provider.rawValue)_\(serviceName)",
+                    serviceName: serviceName,
+                    cost: cost,
+                    currency: currency
+                )
+            }
+            .sorted { $0.cost > $1.cost }
+    }
 }
 
 struct AccountCost: Codable, Equatable, Identifiable, Sendable {
@@ -73,8 +94,39 @@ enum CloudProviderType: String, Codable, CaseIterable, Identifiable, Sendable {
     var iconName: String {
         switch self {
         case .aws: return "cloud.fill"
-        case .azure: return "cloud.fill"
-        case .gcp: return "cloud.fill"
+        case .azure: return "building.2.crop.circle"
+        case .gcp: return "globe.americas.fill"
+        }
+    }
+
+    var scopeSingularTitle: String {
+        switch self {
+        case .aws:
+            return "Account"
+        case .azure:
+            return "Subscription"
+        case .gcp:
+            return "Project"
+        }
+    }
+
+    var scopePluralTitle: String {
+        switch self {
+        case .aws:
+            return "Accounts"
+        case .azure:
+            return "Subscriptions"
+        case .gcp:
+            return "Projects"
+        }
+    }
+
+    var supportsCostFetching: Bool {
+        switch self {
+        case .aws:
+            return true
+        case .azure, .gcp:
+            return false
         }
     }
 }

@@ -11,6 +11,10 @@ final class SettingsViewModel {
         costService.availableProfiles
     }
 
+    var supportedProviders: [CloudProviderType] {
+        costService.supportedProviders
+    }
+
     var selectedRefreshInterval: RefreshScheduler.RefreshInterval {
         costService.refreshScheduler.interval
     }
@@ -32,6 +36,14 @@ final class SettingsViewModel {
 
     func refreshProfiles() async {
         await costService.loadProfiles()
+    }
+
+    func setAWSSharedConfigDirectory(_ directoryURL: URL) async throws {
+        try await costService.setAWSSharedConfigDirectory(directoryURL)
+    }
+
+    func clearAWSSharedConfigDirectory() async {
+        await costService.clearAWSSharedConfigDirectory()
     }
 
     func setLaunchAtLogin(_ enabled: Bool) {
@@ -58,6 +70,18 @@ final class SettingsViewModel {
 
     var isConfigured: Bool {
         costService.isConfigured
+    }
+
+    var awsSharedConfigDirectoryName: String? {
+        costService.awsSharedConfigDirectoryName
+    }
+
+    var hasEnabledAccounts: Bool {
+        costService.hasEnabledAccounts
+    }
+
+    func isAvailable(for provider: CloudProviderType) -> Bool {
+        provider.supportsCostFetching
     }
 
     func clearCache() async {

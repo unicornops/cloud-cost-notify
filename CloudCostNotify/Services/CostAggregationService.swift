@@ -16,13 +16,14 @@ final class CostAggregationService {
     private(set) var lastError: CloudCostError?
     private(set) var accounts: [CloudAccount] = []
     private(set) var availableProfiles: [AWSProfile] = []
+    private(set) var awsSharedConfigDirectoryURL: URL?
 
     private let awsProvider: AWSCostProvider
     private let cacheService: CacheService
     let refreshScheduler: RefreshScheduler
 
     var totalCost: Decimal {
-        costData.reduce(Decimal.zero) { $0 + $1.totalCost }
+        costData.reduce(.zero) { $0 + $1.totalCost }
     }
 
     var formattedTotalCost: String {
@@ -33,7 +34,7 @@ final class CostAggregationService {
     }
 
     var lastUpdated: Date? {
-        costData.first?.lastUpdated
+        costData.map(\.lastUpdated).max()
     }
 
     var formattedLastUpdated: String? {
@@ -41,6 +42,10 @@ final class CostAggregationService {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: date, relativeTo: Date())
+    }
+
+    var supportedProviders: [CloudProviderType] {
+        CloudProviderType.allCases
     }
 
     init() {
@@ -55,31 +60,42 @@ final class CostAggregationService {
 
     func initialize() async {
         await loadCachedData()
+        await loadProviderConfiguration()
         await loadProfiles()
         refreshScheduler.start()
     }
 
     func loadProfiles() async {
-        do {
-            availableProfiles = try AWSProfileParser.shared.parseProfiles()
-            let enabledProfileNames = await cacheService.loadEnabledProfiles()
+        await awsProvider.updateSharedConfigDirectory(awsSharedConfigDirectoryURL)
 
-            availableProfiles = availableProfiles.map { profile in
+        do {
+            let enabledProfileNames = await cacheService.loadEnabledProfiles()
+            let profiles = try AWSProfileParser.shared.parseProfiles(in: awsSharedConfigDirectoryURL)
+
+            availableProfiles = profiles.map { profile in
                 var mutableProfile = profile
                 mutableProfile.isEnabled = enabledProfileNames.contains(profile.name)
                 return mutableProfile
             }
 
-            accounts = try await awsProvider.discoverAccounts()
-            accounts = accounts.map { account in
+            let discoveredAccounts = try await awsProvider.discoverAccounts()
+            accounts = discoveredAccounts.map { account in
                 var mutableAccount = account
                 if let profileName = account.profileName {
                     mutableAccount.isEnabled = enabledProfileNames.contains(profileName)
                 }
                 return mutableAccount
             }
+        } catch let error as CloudCostError {
+            availableProfiles = []
+            accounts = []
+            if awsSharedConfigDirectoryURL != nil {
+                lastError = error
+            }
         } catch {
-            print("Error loading profiles: \(error)")
+            availableProfiles = []
+            accounts = []
+            lastError = .parseError(error.localizedDescription)
         }
     }
 
@@ -88,17 +104,40 @@ final class CostAggregationService {
             availableProfiles[index].isEnabled = enabled
         }
 
-        if let index = accounts.firstIndex(where: { $0.profileName == profileName }) {
+        for index in accounts.indices where accounts[index].profileName == profileName {
             accounts[index].isEnabled = enabled
         }
 
-        let enabledProfiles = Set(availableProfiles.filter { $0.isEnabled }.map { $0.name })
+        let enabledProfiles = Set(availableProfiles.filter { $0.isEnabled }.map(\.name))
         await cacheService.saveEnabledProfiles(enabledProfiles)
     }
 
+    func setAWSSharedConfigDirectory(_ directoryURL: URL) async throws {
+        let bookmark = try directoryURL.bookmarkData(
+            options: [.withSecurityScope],
+            includingResourceValuesForKeys: nil,
+            relativeTo: nil
+        )
+
+        await cacheService.saveAWSSharedConfigDirectoryBookmark(bookmark)
+        awsSharedConfigDirectoryURL = directoryURL
+        lastError = nil
+        await loadProfiles()
+    }
+
+    func clearAWSSharedConfigDirectory() async {
+        await cacheService.saveAWSSharedConfigDirectoryBookmark(nil)
+        awsSharedConfigDirectoryURL = nil
+        availableProfiles = []
+        accounts = []
+        costData.removeAll { $0.provider == .aws }
+        await awsProvider.updateSharedConfigDirectory(nil)
+    }
+
     func fetchCosts() async {
-        guard accounts.contains(where: { $0.isEnabled }) else {
-            loadingState = .error("No accounts enabled")
+        let enabledAccounts = accounts.filter { $0.isEnabled }
+        guard !enabledAccounts.isEmpty else {
+            loadingState = .error("Enable at least one AWS profile in Settings.")
             return
         }
 
@@ -106,11 +145,16 @@ final class CostAggregationService {
         lastError = nil
 
         do {
+            var fetchedCostData: [CostData] = []
             let period = DateRange.monthToDate
-            let data = try await awsProvider.fetchCosts(for: accounts, period: period)
-            costData = [data]
-            loadingState = .loaded
 
+            if enabledAccounts.contains(where: { $0.provider == .aws }) {
+                let awsCostData = try await awsProvider.fetchCosts(for: enabledAccounts, period: period)
+                fetchedCostData.append(awsCostData)
+            }
+
+            costData = fetchedCostData.sorted { $0.provider.rawValue < $1.provider.rawValue }
+            loadingState = .loaded
             try await cacheService.cacheCostData(costData)
         } catch let error as CloudCostError {
             lastError = error
@@ -119,6 +163,33 @@ final class CostAggregationService {
             lastError = .networkError(error)
             loadingState = .error(error.localizedDescription)
         }
+    }
+
+    func setRefreshInterval(_ interval: RefreshScheduler.RefreshInterval) async {
+        refreshScheduler.setInterval(interval)
+        await cacheService.saveRefreshInterval(interval.rawValue)
+    }
+
+    func clearCache() async {
+        await cacheService.clearCache()
+        costData = []
+        if hasEnabledAccounts {
+            loadingState = .loaded
+        } else {
+            loadingState = .idle
+        }
+    }
+
+    var hasEnabledAccounts: Bool {
+        accounts.contains { $0.isEnabled }
+    }
+
+    var isConfigured: Bool {
+        awsProvider.isConfigured
+    }
+
+    var awsSharedConfigDirectoryName: String? {
+        awsSharedConfigDirectoryURL?.lastPathComponent
     }
 
     private func loadCachedData() async {
@@ -137,22 +208,36 @@ final class CostAggregationService {
         }
     }
 
-    func setRefreshInterval(_ interval: RefreshScheduler.RefreshInterval) async {
-        refreshScheduler.setInterval(interval)
-        await cacheService.saveRefreshInterval(interval.rawValue)
-    }
+    private func loadProviderConfiguration() async {
+        guard let bookmark = await cacheService.loadAWSSharedConfigDirectoryBookmark() else {
+            await awsProvider.updateSharedConfigDirectory(nil)
+            return
+        }
 
-    func clearCache() async {
-        await cacheService.clearCache()
-        costData = []
-        loadingState = .idle
-    }
+        do {
+            var isStale = false
+            let url = try URL(
+                resolvingBookmarkData: bookmark,
+                options: [.withSecurityScope],
+                relativeTo: nil,
+                bookmarkDataIsStale: &isStale
+            )
 
-    var hasEnabledAccounts: Bool {
-        accounts.contains { $0.isEnabled }
-    }
+            if isStale {
+                let refreshedBookmark = try url.bookmarkData(
+                    options: [.withSecurityScope],
+                    includingResourceValuesForKeys: nil,
+                    relativeTo: nil
+                )
+                await cacheService.saveAWSSharedConfigDirectoryBookmark(refreshedBookmark)
+            }
 
-    var isConfigured: Bool {
-        awsProvider.isConfigured
+            awsSharedConfigDirectoryURL = url
+            await awsProvider.updateSharedConfigDirectory(url)
+        } catch {
+            awsSharedConfigDirectoryURL = nil
+            await cacheService.saveAWSSharedConfigDirectoryBookmark(nil)
+            await awsProvider.updateSharedConfigDirectory(nil)
+        }
     }
 }

@@ -10,6 +10,7 @@ actor CacheService {
         case lastFetchDate = "last_fetch_date"
         case enabledProfiles = "enabled_profiles"
         case refreshInterval = "refresh_interval"
+        case awsSharedConfigDirectoryBookmark = "aws_shared_config_directory_bookmark"
     }
 
     init(userDefaults: UserDefaults = .standard) {
@@ -51,6 +52,18 @@ actor CacheService {
     func loadRefreshInterval() -> Int {
         let value = userDefaults.integer(forKey: CacheKey.refreshInterval.rawValue)
         return value > 0 ? value : 60
+    }
+
+    func saveAWSSharedConfigDirectoryBookmark(_ bookmark: Data?) {
+        if let bookmark {
+            userDefaults.set(bookmark, forKey: CacheKey.awsSharedConfigDirectoryBookmark.rawValue)
+        } else {
+            userDefaults.removeObject(forKey: CacheKey.awsSharedConfigDirectoryBookmark.rawValue)
+        }
+    }
+
+    func loadAWSSharedConfigDirectoryBookmark() -> Data? {
+        userDefaults.data(forKey: CacheKey.awsSharedConfigDirectoryBookmark.rawValue)
     }
 
     func clearCache() {

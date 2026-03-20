@@ -4,21 +4,31 @@ struct ResourceRowView: View {
     let resourceCost: ResourceCost
 
     var body: some View {
-        HStack {
-            Image(systemName: "cube")
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "shippingbox")
                 .foregroundStyle(.secondary)
                 .font(.caption)
+                .padding(.top, 2)
 
-            Text(resourceCost.serviceName)
-                .font(.callout)
-                .lineLimit(1)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(resourceCost.serviceName)
+                    .font(.callout)
+                    .lineLimit(1)
+
+                if let usage = resourceCost.formattedUsage {
+                    Text(usage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
 
             Spacer()
 
             Text(resourceCost.formattedCost)
                 .font(.callout)
+                .fontWeight(.medium)
                 .monospacedDigit()
         }
-        .padding(.vertical, 2)
+        .padding(.leading, 28)
     }
 }
