@@ -43,7 +43,7 @@ final class MenuBarViewModel {
     var statusText: String {
         switch costService.loadingState {
         case .idle:
-            return "Not configured"
+            return isConfigured ? "Waiting for first refresh" : "Connect an AWS shared config folder"
         case .loading:
             return "Updating..."
         case .loaded:
@@ -60,12 +60,18 @@ final class MenuBarViewModel {
         if isLoading {
             return "..."
         }
+        if !isConfigured && costService.costData.isEmpty {
+            return "--"
+        }
         return displayCost
     }
 
     var menuBarIcon: String {
         if hasError {
             return "exclamationmark.triangle"
+        }
+        if !isConfigured {
+            return "cloud"
         }
         return "dollarsign.circle"
     }
@@ -88,5 +94,9 @@ final class MenuBarViewModel {
 
     var nextRefresh: String? {
         costService.refreshScheduler.formattedTimeUntilNextRefresh
+    }
+
+    var supportedProviders: [CloudProviderType] {
+        costService.supportedProviders
     }
 }

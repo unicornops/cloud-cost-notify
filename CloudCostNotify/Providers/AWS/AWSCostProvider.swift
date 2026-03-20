@@ -4,6 +4,7 @@ final class AWSCostProvider: CloudCostProvider, @unchecked Sendable {
     let providerType: CloudProviderType = .aws
     private let profileParser: AWSProfileParser
     private let costExplorerClient: AWSCostExplorerClient
+    private var sharedConfigDirectory: URL?
 
     init(profileParser: AWSProfileParser = .shared, costExplorerClient: AWSCostExplorerClient = AWSCostExplorerClient()) {
         self.profileParser = profileParser
@@ -11,16 +12,22 @@ final class AWSCostProvider: CloudCostProvider, @unchecked Sendable {
     }
 
     var isConfigured: Bool {
-        profileParser.hasCredentialsFile()
+        profileParser.hasConfiguration(in: sharedConfigDirectory)
+    }
+
+    func updateSharedConfigDirectory(_ directoryURL: URL?) async {
+        sharedConfigDirectory = directoryURL
+        await costExplorerClient.clearCache()
     }
 
     func discoverAccounts() async throws -> [CloudAccount] {
-        let profiles = try profileParser.parseProfiles()
+        let profiles = try profileParser.parseProfiles(in: sharedConfigDirectory)
         return profiles.map { profile in
             CloudAccount(
                 id: "aws_\(profile.name)",
                 provider: .aws,
                 name: profile.name,
+                accountIdentifier: profile.name,
                 profileName: profile.name,
                 isEnabled: profile.isEnabled
             )
@@ -43,7 +50,8 @@ final class AWSCostProvider: CloudCostProvider, @unchecked Sendable {
                 let output = try await costExplorerClient.fetchCosts(
                     profileName: profileName,
                     startDate: period.start,
-                    endDate: period.end
+                    endDate: period.end,
+                    sharedConfigDirectory: sharedConfigDirectory
                 )
 
                 let accountCosts = parseOutput(output, for: account)

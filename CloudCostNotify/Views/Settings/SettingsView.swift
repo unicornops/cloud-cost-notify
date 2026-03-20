@@ -7,7 +7,7 @@ struct SettingsView: View {
         TabView {
             AccountsSettingsView(viewModel: viewModel)
                 .tabItem {
-                    Label("Accounts", systemImage: "person.2")
+                    Label("Providers", systemImage: "cloud")
                 }
 
             RefreshSettingsView(viewModel: viewModel)
@@ -17,10 +17,10 @@ struct SettingsView: View {
 
             GeneralSettingsView(viewModel: viewModel)
                 .tabItem {
-                    Label("General", systemImage: "gear")
+                    Label("General", systemImage: "gearshape")
                 }
         }
-        .frame(width: 450, height: 300)
+        .frame(width: 560, height: 420)
     }
 }
 
@@ -29,15 +29,15 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         Form {
-            Section {
+            Section("App") {
                 Toggle("Launch at Login", isOn: Binding(
                     get: { viewModel.launchAtLogin },
                     set: { viewModel.setLaunchAtLogin($0) }
                 ))
             }
 
-            Section {
-                Button("Clear Cache") {
+            Section("Data") {
+                Button("Clear Cached Cost Data") {
                     Task {
                         await viewModel.clearCache()
                     }

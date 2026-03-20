@@ -84,7 +84,7 @@ xcodebuild archive \
     CODE_SIGN_IDENTITY="${APP_IDENTITY}" \
     CODE_SIGN_STYLE=Manual \
     PROVISIONING_PROFILE_SPECIFIER="CloudCostNotify App Store" \
-    CODE_SIGN_ENTITLEMENTS="CloudCostNotify/CloudCostNotify.AppStore.entitlements" \
+    CODE_SIGN_ENTITLEMENTS="CloudCostNotify/CloudCostNotify.entitlements" \
     ENABLE_HARDENED_RUNTIME=NO \
     | grep -v "^$" || true  # Filter empty lines, don't fail on grep
 

@@ -17,7 +17,12 @@ let package = Package(
                 .product(name: "AWSClientRuntime", package: "aws-sdk-swift"),
                 .product(name: "AWSSDKIdentity", package: "aws-sdk-swift")
             ],
-            path: "CloudCostNotify"
+            path: "CloudCostNotify",
+            exclude: [
+                "CloudCostNotify.entitlements",
+                "Info.plist",
+                "Resources"
+            ]
         )
     ]
 )
