@@ -71,14 +71,18 @@ jobs:
         if: steps.version_strategy.outputs.strategy == 'auto'
         id: next_version
         run: |
-          NEXT_VERSION=$(cog bump --auto --dry-run 2>&1 || echo "none")
-          if [ "$NEXT_VERSION" == "none" ] || echo "$NEXT_VERSION" | grep -q "No conventional commits"; then
+          # cocogitto 6.4 exits 0 and prints informational lines on stdout
+          # even when no bump is needed, so only a bare version line means a
+          # release is due. Otherwise skip the release steps instead of
+          # failing the job.
+          NEXT_VERSION=$(cog bump --auto --dry-run 2>/dev/null | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | tail -n1) || true
+          if [ -z "$NEXT_VERSION" ]; then
             echo "No new version to bump - no conventional commits found"
             echo "next_version=none" >> $GITHUB_OUTPUT
-            exit 1
+          else
+            echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+            echo "Next version will be: $NEXT_VERSION"
           fi
-          echo "next_version=$NEXT_VERSION" >> $GITHUB_OUTPUT
-          echo "Next version will be: $NEXT_VERSION"
 
       - name: Cocogitto bump
         if: steps.version_strategy.outputs.strategy == 'auto' && steps.next_version.outputs.next_version != 'none'
@@ -105,6 +109,7 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set bump output
+        if: steps.next_version.outputs.next_version != 'none'
         id: bump
         run: |
           if [ "${{ steps.version_strategy.outputs.strategy }}" == "manual" ]; then
@@ -114,10 +119,12 @@ jobs:
           fi
 
       - name: Push tags
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           git push --follow-tags
 
       - name: Generate changelog for release
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           VERSION="${{ steps.bump.outputs.version }}"
           if [ "${{ steps.version_strategy.outputs.strategy }}" == "manual" ]; then
@@ -138,6 +145,7 @@ jobs:
           fi
 
       - name: Show build environment
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           echo "Xcode version:"
           xcodebuild -version
@@ -149,6 +157,7 @@ jobs:
           sw_vers
 
       - name: Set version for build
+        if: steps.next_version.outputs.next_version != 'none'
         id: version
         run: |
           VERSION="${{ steps.bump.outputs.version }}"
@@ -158,10 +167,11 @@ jobs:
           echo "Building version: $VERSION"
 
       - name: Clean build directory
+        if: steps.next_version.outputs.next_version != 'none'
         run: rm -rf build/
 
       - name: Setup code signing
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.next_version.outputs.next_version != 'none'
         env:
           CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
@@ -274,7 +284,7 @@ jobs:
           echo "✅ Code signing certificate installed"
 
       - name: Build and sign release
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.next_version.outputs.next_version != 'none'
         run: |
           echo "Building with Developer ID Application certificate for team: $CERT_TEAM_ID"
 
@@ -306,6 +316,7 @@ jobs:
             build
 
       - name: Find built app
+        if: steps.next_version.outputs.next_version != 'none'
         id: find-app
         run: |
           APP_PATH=$(find build -name "CloudCostNotify.app" -type d | head -n 1)
@@ -325,6 +336,7 @@ jobs:
           fi
 
       - name: Verify app bundle
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           APP_PATH="${{ steps.find-app.outputs.app_path }}"
 
@@ -349,6 +361,7 @@ jobs:
           echo "✓ App bundle verification successful"
 
       - name: Verify code signature
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           APP_PATH="${{ steps.find-app.outputs.app_path }}"
 
@@ -363,6 +376,7 @@ jobs:
           echo "✅ Code signature verification successful"
 
       - name: Notarize app
+        if: steps.next_version.outputs.next_version != 'none'
         env:
           APPLE_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
@@ -415,6 +429,7 @@ jobs:
           rm NotarizeApp.zip
 
       - name: Get app info
+        if: steps.next_version.outputs.next_version != 'none'
         id: app-info
         run: |
           APP_PATH="${{ steps.find-app.outputs.app_path }}"
@@ -436,6 +451,7 @@ jobs:
           echo "Build: $BUNDLE_BUILD"
 
       - name: Create DMG
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           APP_PATH="${{ steps.find-app.outputs.app_path }}"
           VERSION="${{ steps.version.outputs.version }}"
@@ -459,6 +475,7 @@ jobs:
         id: create-dmg
 
       - name: Create ZIP archive
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           APP_PATH="${{ steps.find-app.outputs.app_path }}"
           VERSION="${{ steps.version.outputs.version }}"
@@ -480,6 +497,7 @@ jobs:
         id: create-zip
 
       - name: Calculate checksums
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           DMG_NAME="${{ steps.create-dmg.outputs.dmg_name }}"
           ZIP_NAME="${{ steps.create-zip.outputs.zip_name }}"
@@ -492,7 +510,7 @@ jobs:
           cat checksums.txt
 
       - name: Cleanup certificate
-        if: always()
+        if: always() && steps.next_version.outputs.next_version != 'none'
         run: |
           echo "Cleaning up imported certificate from login keychain..."
           security find-identity -v -p codesigning | grep "Developer ID Application: Unicorn Operations" | while read line; do
@@ -505,6 +523,7 @@ jobs:
           echo "Certificate cleanup complete"
 
       - name: Create Release Notes
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           BUNDLE_VERSION="${{ steps.app-info.outputs.bundle_version }}"
@@ -569,6 +588,7 @@ jobs:
           cat release-notes.md
 
       - name: Create GitHub Release
+        if: steps.next_version.outputs.next_version != 'none'
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           tag_name: ${{ steps.bump.outputs.version }}
@@ -583,6 +603,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Release summary
+        if: steps.next_version.outputs.next_version != 'none'
         run: |
           VERSION="${{ steps.version.outputs.version }}"
 
